@@ -1,2 +1,7 @@
 /Backend/node_modules
-/Backend/.venv
+/Backend/.env
+
+
+/Backend/usuario-servicio/node_modules
+/Backend/usuario-servicio/packeage.json
+/Backend/usuario-servicio/packeage-lock.json
