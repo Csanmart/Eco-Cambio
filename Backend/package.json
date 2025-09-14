@@ -17,10 +17,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon products-service/index.js"
+    "dev:products": "nodemon products-service/index.js",
+    "dev:users": "nodemon user-Service/index.js",
+    "dev": "npm-run-all --parallel dev:"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
 }

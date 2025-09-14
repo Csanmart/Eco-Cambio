@@ -35,7 +35,7 @@ app.use('/user', routers);
     
         app.listen(port, "0.0.0.0", ()=>{
             console.log(`Conectado a http://localhost:${port}`)
-            console.log('conectado a http://192.168.1.50:3000/')
+            console.log('conectado a http://192.168.56.1:3000/')
         })
     } catch (error) {
         console.log('Error con el servidor...')

@@ -1,6 +1,9 @@
 const productsModels = require('../models/products-models');
 const {delay} = require('../utils/delay')
 
+
+
+
 exports.allProducts = async(req, res)=>{
     try{
         const producto = await productsModels.find();
@@ -26,7 +29,7 @@ exports.getProductoById = async(req, res)=>{
 };
 
 exports.createProduct = async(req, res)=>{
-    const {imagen, nombre, precio, tipo, categoria, descripcion, ubicacion} = req.body;
+    const {imagen, nombre, tipo, categoria, descripcion, ubicacion} = req.body;
     
 
     if(!imagen || !nombre || !tipo || !categoria || !descripcion || !ubicacion){
@@ -43,9 +46,9 @@ exports.createProduct = async(req, res)=>{
 
 exports.actualizarProducto = async(req, res)=>{
     const {id} = req.params;
-    const {imagen, nombre, precio, tipo, categoria, descripcion, ubicacion} = req.body;
+    const {imagen, nombre, tipo, categoria, descripcion, ubicacion} = req.body;
 
-    if(!imagen || !nombre || !precio ||!tipo || !categoria || !descripcion || !ubicacion){
+    if(!imagen || !nombre  || !tipo || !categoria || !descripcion || !ubicacion){
         res.status(500).json({message: 'Todos los campos son obligatorios'})
     }
     try{
@@ -66,6 +69,4 @@ exports.elimarProducto = async(req, res)=>{
     } catch (error) {
         res.status(400).json({message: 'Error eliminando el producto', error})
     }
-
-}
-
+};
