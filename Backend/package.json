@@ -6,7 +6,6 @@
     "express-rate-limit": "^8.0.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.0",
-    "moongose": "^1.0.0",
     "mysql2": "^3.14.3",
     "nodemailer": "^7.0.6",
     "nodemon": "^3.1.10",
@@ -15,12 +14,12 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:products": "nodemon products-service/index.js",
-    "dev:users": "nodemon user-Service/index.js",
-    "dev": "npm-run-all --parallel dev:"
-  },
+ "scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "dev:products": "nodemon products-service/index.js",
+  "dev:users": "nodemon user-Service/index.js",
+  "dev": "npm-run-all --parallel dev:products dev:users"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",

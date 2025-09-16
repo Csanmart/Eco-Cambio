@@ -4,10 +4,6 @@ const userControllers = require('../controllers/user-controllers');
 const authMiddleware = require('../middelware/auth-middelware');
 
 
-
-router.get('/', (req, res)=>{
-    res.send('Hola mundo')
-})
 router.post('/registro', userControllers.Registro);
 router.post('/login',userControllers.InicioSesion);
 router.get('/usuarios/:id', userControllers.usuarioById);

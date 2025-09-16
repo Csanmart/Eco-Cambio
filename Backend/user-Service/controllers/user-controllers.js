@@ -3,50 +3,62 @@ const userModel = require('../models/user-models');
 const jwt = require('jsonwebtoken');
 
 
+// Registro
+exports.Registro = async (req, res) => {
+    const { nombre, correo, telefono, contrasena, pregunta, respuesta } = req.body;
 
-
-//Registro
-exports.Registro = async(req, res)=>{
-    const {nombre, correo, telefono, contrasena, pregunta, respuesta} = req.body;
-    
-    //Regex 
+    // Regex
     const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
-    const regexTelefono =  /^(3\d{9})$/
+    const regexTelefono = /^(3\d{9})$/;
 
-    //Condicional
-    if(!nombre || !correo || !telefono || !contrasena || !pregunta || !respuesta){
-        return res.status(500)
-    }else if(!regexTelefono.test(telefono)){
-        return res.status(500).json({Message: 'Recuerda que el numero debe empezar por 300'})
-    }else if(!regexEmail.test(correo)){
-        return res.status(500).json({message: 'No coinciden con un el correo'})
+    // Validaciones
+    if (!nombre || !correo || !telefono || !contrasena || !pregunta || !respuesta) {
+        return res.status(400).json({ message: "Todos los campos son obligatorios" });
+    } else if (!regexTelefono.test(telefono)) {
+        return res
+            .status(400)
+            .json({ message: "El número de teléfono debe empezar por 3 y tener 10 dígitos" });
+    } else if (!regexEmail.test(correo)) {
+        return res.status(400).json({ message: "El correo no tiene un formato válido" });
     }
-
 
     try {
-        const respuestaHash = await hashRespuesta(respuesta)
+        // Hashear datos sensibles
+        const respuestaHash = await hashRespuesta(respuesta);
         const handleContrasena = await hashContrasena(contrasena);
-        
+
+        // Guardar en BD
         const registro = await userModel.create({
-            nombre: nombre,
-            correo: correo,
-            telefono: telefono,
+            nombre,
+            correo,
+            telefono,
             contrasena: handleContrasena,
-            pregunta: pregunta,
-            respuesta: respuestaHash
+            pregunta,
+            respuesta: respuestaHash,
         });
-        
-        res.status(201).json(registro); 
-    
+
+        // Respuesta exitosa
+        res.status(201).json({
+            message: "Usuario registrado correctamente",
+            usuario: {
+                id_user: registro.id_user,
+                nombre: registro.nombre,
+                correo: registro.correo,
+                telefono: registro.telefono,
+            },
+        });
     } catch (error) {
+        // Manejo específico para el error de unicidad
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(409).json({ message: "El correo electrónico ya se encuentra registrado." });
+        }
         
-        console.log(res);
-        
-        return res.status(400).json({message:'Error creando el usuario', error}); 
+        console.error("❌ Error en Registro:", error);
+        return res.status(500).json({
+            message: "Error creando el usuario",
+        });
     }
 };
-
-
 
 //Login 
 exports.InicioSesion = async(req, res) =>{

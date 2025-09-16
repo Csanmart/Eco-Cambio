@@ -1,48 +1,40 @@
 const express = require('express');
+const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const sequelize = require('./config/config');
+const routers = require('./routers/user-routes');
+
 const app = express();
 const port = 3000;
-const sequelize = require('./config/config');
-const userModel = require('./models/user-models');
-const routers = require('./routers/user-routes');
-const cors = require('cors')
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
-
+// ✅ Configuración CORS
 const corsOptions = {
-    origin: ['http://localhost:3000'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    crendentials: true
+  origin: ['http://localhost:5173'], // tu frontend (vite)
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true
 };
-
 app.use(cors(corsOptions));
 
+// Rutas
 app.use('/user', routers);
 
-//Sincronizacion con el sequelize y el servidor
+// Iniciar servidor y DB
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Conectado a la base de datos');
 
-(async ()=>{
-    try {
-        await sequelize.authenticate()
-        console.log('Conectado a la base de datos')
+    await sequelize.sync();
+    console.log('Tablas listas');
 
-        await sequelize.sync()
-        console.log('Tabla establecida');
-
-    
-        app.listen(port, "0.0.0.0", ()=>{
-            console.log(`Conectado a http://localhost:${port}`)
-            console.log('conectado a http://192.168.56.1:3000/')
-        })
-    } catch (error) {
-        console.log('Error con el servidor...')
-    }
+    app.listen(port, "0.0.0.0", () => {
+      console.log(`✅ Servidor user corriendo en http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.log('❌ Error con el servidor...', error);
+  }
 })();
-
-
-
-
-
