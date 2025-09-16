@@ -15,11 +15,11 @@ exports.Registro = async(req, res)=>{
 
     //Condicional
     if(!nombre || !correo || !telefono || !contrasena || !pregunta || !respuesta){
-        return res.status(500)
+        return res.status(400)
     }else if(!regexTelefono.test(telefono)){
-        return res.status(500).json({Message: 'Recuerda que el numero debe empezar por 300'})
+        return res.status(400).json({Message: 'Recuerda que el numero debe empezar por 300'})
     }else if(!regexEmail.test(correo)){
-        return res.status(500).json({message: 'No coinciden con un el correo'})
+        return res.status(400).json({message: 'No coinciden con un el correo'})
     }
 
 
@@ -52,7 +52,7 @@ exports.Registro = async(req, res)=>{
 exports.InicioSesion = async(req, res) =>{
     const {correo, contrasena} = req.body;
     if(!correo || !contrasena){
-        res.status(500).json({message: 'Todos los campos debe de estar llenos'})
+        res.status(400).json({message: 'Todos los campos debe de estar llenos'})
     }
     try{
         const login = await userModel.findOne({where: {correo}});
@@ -91,7 +91,7 @@ exports.usuarioById = async(req, res)=>{
     try{
         const usuario = await userModel.findByPk(id);
         
-        if(!usuario)return res.status(400).json({message: 'No se encuentra estos usuarios'});
+        if(!usuario)return res.status(404).json({message: 'No se encuentra estos usuarios'});
         
         res.status(200).json({message: 'Usuario por id: ', usuario});
     

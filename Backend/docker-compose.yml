@@ -1,0 +1,70 @@
+version: "3.9"
+
+services:
+  # --- User Service ---
+  user-service:
+    build: 
+      context: .
+      dockerfile: user-Service/Dockerfile
+    container_name: user-service
+    ports:
+      - "3000:3000"
+    depends_on:
+      - user-db
+    environment:
+      - DB_HOST=user-db
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+      - DB_NAME=userdb
+    networks:
+      - backend-network
+
+  user-db:
+    image: mysql:8
+    container_name: user-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: userdb
+    ports:
+      - "3308:3306"
+    volumes:
+      - user-db-data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  # --- Products Service ---
+  products-service:
+    build: 
+      context: .
+      dockerfile: products-service/Dockerfile
+    container_name: products-service
+    ports:
+      - "4000:4000"
+    depends_on:
+      - products-db
+    environment:
+      - DB_HOST=products-db
+      - DB_PORT=27017
+      - DB_NAME=productsdb
+    networks:
+      - backend-network
+
+  products-db:
+    image: mongo:6
+    container_name: products-db
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - products-db-data:/data/db
+    networks:
+      - backend-network
+
+# --- Redes y Volúmenes ---
+networks:
+  backend-network:
+
+volumes:
+  user-db-data:
+  products-db-data:

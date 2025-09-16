@@ -7,19 +7,19 @@ exports.respuesta = async (req, res) => {
     const { comentarioId, id_user, respuesta } = req.body;
     try {
         // validar comentario en Mongo
-        const comentario = await Comentarios.findById(comentarioId);
+        const comentario = await comentarios.findById(comentarioId);
         if (!comentario) {
             return res.status(404).json({ message: 'Comentario no encontrado' });
         }
 
         // validar usuario en SQL
-        const usuario = await Usuarios.findByPk(id_user);
+        const usuario = await usuarios.findByPk(id_user);
         if (!usuario) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
 
         // crear respuesta en Mongo
-        const nuevaRespuesta = await Respuestas.create({
+        const nuevaRespuesta = await respuestas.create({
             comentarioId,
             id_user,
             respuesta
@@ -44,7 +44,7 @@ exports.allrepuestas = async(req, res)=>{
     try {
         const mostrarRepuesta = await respuestas.find({comentarioId: id});
 
-        const respuestaUsuario = await Promise.all(mostrarRepuesta.map(async(e)=>{
+        const respuestaUsuario = await Promise.all(mostrarRepuesta.map(async(c)=>{
             const usuario = await usuarios.findByPk(c.id_user);
             return{
                 ...c.toObject(),
