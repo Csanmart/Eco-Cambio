@@ -15,12 +15,11 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:products": "nodemon products-service/index.js",
-    "dev:users": "nodemon user-Service/index.js",
-    "dev": "npm-run-all --parallel dev:"
-  },
+"scripts": {
+  "dev:products": "nodemon products-service/index.js",
+  "dev:users": "nodemon user-Service/index.js",
+  "dev": "npm-run-all --parallel dev:products dev:users"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
