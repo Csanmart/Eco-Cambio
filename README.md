@@ -4,7 +4,7 @@
 - Daniela Arredondo Ocampo  
 - Andrés Felipe Lozano
 - Camilo Sanmartin Oquendo
-- hernan alberto 
+- Hernan Giraldo Ortiz
 
 ---
 
